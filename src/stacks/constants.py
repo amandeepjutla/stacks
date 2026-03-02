@@ -28,6 +28,7 @@ RESERVED_PATHS = ['/logs', '/config', '/files', '/cache', '/web']
 
 # Anna's Archive Domains (rotating fallbacks)
 ANNAS_ARCHIVE_DOMAINS = [
+    "annas-archive.gl",
     "annas-archive.li",
     "annas-archive.pm",
     "annas-archive.in"

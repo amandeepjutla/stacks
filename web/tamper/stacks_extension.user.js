@@ -4,10 +4,11 @@
 // @version      1.2.1
 // @description  Add download buttons to Anna's Archive that queue downloads to Stacks server
 // @author       Zelest Carlyone
+// @match        https://annas-archive.gl/*
 // @match        https://annas-archive.li/*
 // @match        https://annas-archive.pm/*
 // @match        https://annas-archive.in/*
-// @icon         https://annas-archive.li/favicon.ico
+// @icon         https://annas-archive.gl/favicon.ico
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getValue
 // @grant        GM_setValue
