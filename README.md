@@ -25,6 +25,7 @@ Stacks is a containerized download queue manager designed specifically for Anna'
 - **Queue Management** - Add books to a download queue from your browser with one click
 - **Fast Download Support** - Utilize Anna's Archive membership for priority downloads
 - **Automatic Fallback** - Seamlessly falls back to mirror sites when fast downloads are unavailable
+- **Challenge Solver** - Bundles [Byparr](https://github.com/ThePhaseless/Byparr) (a drop-in, FlareSolverr-compatible solver) to clear Cloudflare/DDoS-Guard challenges on protected mirrors
 - **Real-time Dashboard** - Monitor downloads, queue status, and history
 - **Browser Integration** - Tampermonkey script adds download buttons directly to Anna's Archive
 - **Docker Ready** - Easy deployment with Docker Compose
