@@ -120,7 +120,7 @@
             <ul>
               <li>Authentification</li>
               <li>Downloads</li>
-              <li>FlareSolverr</li>
+              <li>Challenge Solver</li>
               <li>Queue</li>
               <li>Logging</li>
             </ul>
@@ -248,30 +248,30 @@
               </div>
             </div>
 
-            <!-- Flaresolverr -->
-            <div class="settings-content" data-setting="flaresolverr">
+            <!-- Challenge Solver -->
+            <div class="settings-content" data-setting="solver">
               <div class="settings-section">
                 <h3>
                   <div class="title-switch">
                     <label class="switch">
-                      <input type="checkbox" id="setting-flaresolverr-enabled" />
+                      <input type="checkbox" id="setting-solver-enabled" />
                       <span class="slider"></span>
                       <span class="label"></span>
                     </label>
-                    FlareSolverr (Cloudflare Bypass)
+                    Challenge Solver (Cloudflare / DDoS-Guard bypass)
                   </div>
                 </h3>
                 <div class="settings-group">
-                  <label for="setting-flaresolverr-url">FlareSolverr URL</label>
-                  <input type="text" id="setting-flaresolverr-url" placeholder="http://localhost:8191" />
-                  <div class="comment">URL to your FlareSolverr instance (default: http://localhost:8191)</div>
+                  <label for="setting-solver-url">Solver URL</label>
+                  <input type="text" id="setting-solver-url" placeholder="http://localhost:8191" />
+                  <div class="comment">URL to your challenge solver — Byparr or FlareSolverr (default: http://localhost:8191)</div>
 
-                  <label for="setting-flaresolverr-timeout">Timeout (seconds)</label>
-                  <input type="number" id="setting-flaresolverr-timeout" min="10" max="300" value="60" />
-                  <div class="comment">Maximum time to wait for FlareSolverr to solve challenges (10-300 seconds)</div>
+                  <label for="setting-solver-timeout">Timeout (seconds)</label>
+                  <input type="number" id="setting-solver-timeout" min="10" max="300" value="60" />
+                  <div class="comment">Maximum time to wait for the solver to solve challenges (10-300 seconds)</div>
 
-                  <button class="btn btn-secondary btn--spaced" onclick="testFlaresolverr()">Test Connection</button>
-                  <div id="flaresolverr-test-result" class="test-result"></div>
+                  <button class="btn btn-secondary btn--spaced" onclick="testSolver()">Test Connection</button>
+                  <div id="solver-test-result" class="test-result"></div>
                 </div>
               </div>
             </div>

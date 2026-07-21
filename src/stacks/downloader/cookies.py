@@ -109,18 +109,18 @@ def _save_cookies_to_cache(d, cookies_dict, domain=None):
         d.logger.debug(f"Failed to cache cookies for {domain}: {e}")
 
 def _prewarm_cookies_single_domain(d, domain):
-    """Pre-warm cookies using FlareSolverr for a specific domain."""
-    if not d.flaresolverr_url:
+    """Pre-warm cookies using the solver for a specific domain."""
+    if not d.solver_url:
         return False
 
-    d.logger.debug(f"Pre-warming cookies for {domain} with FlareSolverr...")
+    d.logger.debug(f"Pre-warming cookies for {domain} with the solver...")
 
     # Use a slow_download URL to trigger DDG challenge and get all cookies
     # This ensures we get __ddg* cookies needed for slow_download access
     from stacks.constants import KNOWN_MD5
     test_url = f"https://{domain}/slow_download/{KNOWN_MD5}/0/0"
 
-    success, cookies, _ = d.solve_with_flaresolverr(test_url)
+    success, cookies, _ = d.solve_with_solver(test_url)
 
     if success and cookies:
         _save_cookies_to_cache(d, cookies, domain)
@@ -132,14 +132,14 @@ def _prewarm_cookies_single_domain(d, domain):
 
 def _prewarm_cookies(d):
     """
-    Pre-warm cookies using FlareSolverr with automatic domain rotation.
+    Pre-warm cookies using the solver with automatic domain rotation.
 
     Uses a slow_download URL to ensure we get all DDG cookies.
     """
-    if not d.flaresolverr_url:
+    if not d.solver_url:
         return False
 
-    d.logger.info("Pre-warming cookies with FlareSolverr...")
+    d.logger.info("Pre-warming cookies with the solver...")
 
     try:
         return try_domains_until_success(_prewarm_cookies_single_domain, d)

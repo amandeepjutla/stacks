@@ -70,7 +70,7 @@ Stacks supports three authentication methods with different permission levels:
 | `/api/config`                   | GET    | ✔️       | ✔️         | ❌      | Get current configuration                      |
 | `/api/config`                   | POST   | ✔️       | ✔️         | ❌      | Update configuration (live reload)             |
 | `/api/config/test_key`          | POST   | ✔️       | ✔️         | ❌      | Test Anna's Archive fast download key validity |
-| `/api/config/test_flaresolverr` | POST   | ✔️       | ✔️         | ❌      | Test FlareSolverr connection                   |
+| `/api/config/test_solver` | POST   | ✔️       | ✔️         | ❌      | Test challenge solver connection               |
 
 ## Example Usage
 

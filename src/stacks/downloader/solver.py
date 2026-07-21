@@ -1,24 +1,24 @@
 import requests
 from urllib.parse import urlparse
 
-def solve_with_flaresolverr(d, url):
-    """Use FlareSolverr to bypass DDoS-Guard/Cloudflare protection."""
-    if not d.flaresolverr_url:
+def solve_with_solver(d, url):
+    """Use the configured solver to bypass DDoS-Guard/Cloudflare protection."""
+    if not d.solver_url:
         return False, {}, None
     
-    d.logger.info("Using FlareSolverr to solve protection challenge...")
+    d.logger.info("Using the solver to bypass protection challenge...")
     
     try:
         payload = {
             "cmd": "request.get",
             "url": url,
-            "maxTimeout": d.flaresolverr_timeout
+            "maxTimeout": d.solver_timeout
         }
         
         response = requests.post(
-            f"{d.flaresolverr_url}/v1",
+            f"{d.solver_url}/v1",
             json=payload,
-            timeout=d.flaresolverr_timeout / 1000 + 10
+            timeout=d.solver_timeout / 1000 + 10
         )
         response.raise_for_status()
         
@@ -30,7 +30,7 @@ def solve_with_flaresolverr(d, url):
             cookies_dict = {cookie['name']: cookie['value'] for cookie in cookies_list}
             html_content = solution.get('response')
             
-            d.logger.info(f"FlareSolverr: Success - got {len(cookies_dict)} cookies")
+            d.logger.info(f"Solver: Success - got {len(cookies_dict)} cookies")
 
             # Extract domain from URL
             actual_domain = urlparse(url).netloc.split(':')[0]
@@ -45,12 +45,12 @@ def solve_with_flaresolverr(d, url):
             return True, cookies_dict, html_content
         else:
             error_msg = data.get('message', 'Unknown error')
-            d.logger.error(f"FlareSolverr failed: {error_msg}")
+            d.logger.error(f"Solver failed: {error_msg}")
             return False, {}, None
             
     except requests.Timeout:
-        d.logger.error("FlareSolverr timeout")
+        d.logger.error("Solver timeout")
         return False, {}, None
     except Exception as e:
-        d.logger.error(f"FlareSolverr error: {e}")
+        d.logger.error(f"Solver error: {e}")
         return False, {}, None

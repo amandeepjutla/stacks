@@ -114,9 +114,9 @@ def _apply_default(default, key, old_value):
         case "USERNAME":
             logger.warning(f"Username '{old_value}' is invalid. Resetting back to '{DEFAULT_USERNAME}'.")
             default = os.environ.get('USERNAME', DEFAULT_USERNAME)
-        case "FLARESOLVERR":
-            default = os.environ.get("SOLVERR_URL", None)
-            logger.warning(f"FlareSolverr URL is invalid Resetting back to '{default}'.")
+        case "SOLVER":
+            default = os.environ.get("SOLVER_URL", None)
+            logger.warning(f"Solver URL is invalid, resetting back to '{default}'.")
     return default
 
 def _validate_value(value, rules, key, section=None, normalized=None):

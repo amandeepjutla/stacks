@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.0]
+
+### Features
+- Switched the bundled challenge solver from FlareSolverr to **Byparr** (`ghcr.io/thephaseless/byparr:latest`), a drop-in, FlareSolverr-compatible solver (same `/v1` API, port 8191) with a stronger browser engine that clears current DDoS-Guard challenges the original FlareSolverr can no longer solve.
+
+### Architecture
+- Renamed the solver integration from FlareSolverr-specific naming to a tool-neutral `solver` concept so the engine can be swapped without further code changes:
+  - Config section `flaresolverr:` → `solver:` (same `enabled`/`url`/`timeout` keys)
+  - Environment variable `SOLVERR_URL` → `SOLVER_URL`
+  - API endpoint `/api/config/test_flaresolverr` → `/api/config/test_solver`
+  - Module `downloader/flaresolver.py` → `downloader/solver.py`
+  - Settings UI section relabeled "Challenge Solver"
+- `docker-compose.yml` solver service renamed `flaresolverr` → `byparr`, with `shm_size: 2gb` for the Camoufox/Firefox browser engine.
+
+### Upgrade notes
+- Existing configs using the old `flaresolverr:` section must rename it to `solver:` (values are otherwise identical). Deployments using the `SOLVERR_URL` env var should switch to `SOLVER_URL` and point it at the new `byparr` container.
+
 ## [1.2.1]
 
 ### Bugfixes

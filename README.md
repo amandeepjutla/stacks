@@ -9,7 +9,7 @@
 [![Alpine](https://img.shields.io/badge/Alpine-3.23-0D597F?style=flat&logo=alpinelinux&logoColor=white)](https://alpinelinux.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.1.2-000000?style=flat&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![Gunicorn](https://img.shields.io/badge/Gunicorn-23.0.0-499848?style=flat&logo=gunicorn&logoColor=white)](https://github.com/benoitc/gunicorn)
-[![FlareSolverr](https://img.shields.io/badge/FlareSolverr-Compatible-orange?style=flat&logo=cloudflare&logoColor=white)](https://github.com/FlareSolverr/FlareSolverr)
+[![Byparr](https://img.shields.io/badge/Byparr-Compatible-orange?style=flat&logo=cloudflare&logoColor=white)](https://github.com/ThePhaseless/Byparr)
 [![Tampermonkey](https://img.shields.io/badge/tampermonkey-%2300485B.svg?style=flat&logo=tampermonkey&logoColor=white)](https://www.tampermonkey.net/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -46,7 +46,7 @@ You can deploy it with either **Docker Compose** or the **Docker CLI**.
 **Prerequisites**
 
 - Docker and Docker Compose installed
-- _(Recommended)_ FlareSolverr for solving Cloudflare/DDoS-guard
+- _(Recommended)_ Byparr (or FlareSolverr) for solving Cloudflare/DDoS-Guard
 - _(Optional)_ Anna's Archive membership for fast downloads
 
 1. Create a file named `docker-compose.yaml` and add the following:
@@ -85,26 +85,26 @@ You can deploy it with either **Docker Compose** or the **Docker CLI**.
           # Uncomment to reset the admin password to the above values on startup
           # - RESET_ADMIN=true
 
-          # If you're using the included flaresolverr, this will automatically
+          # If you're using the included byparr solver, this will automatically
           # connect it. If you already got it running, you can change this
           # address to match your local setup, or delete this variable and set
           # it up inside Stacks later.
-          - SOLVERR_URL=flaresolverr:8191
+          - SOLVER_URL=byparr:8191
 
           # Set your timezone:
           # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
           - TZ=UTC
 
-      # Optional, but recommended - bypasses Cloudflare and DDoS-Guard
-      # protection on mirror sites. Required if you encounter 403 errors when
-      # downloading. Not needed for fast downloads.
-      flaresolverr:
-          image: ghcr.io/flaresolverr/flaresolverr:latest
-          container_name: flaresolverr
+      # Optional, but recommended - a challenge solver that bypasses Cloudflare
+      # and DDoS-Guard protection on mirror sites. Required if you encounter 403
+      # errors when downloading. Not needed for fast downloads. Byparr is a
+      # drop-in, FlareSolverr-compatible solver (same /v1 API, port 8191).
+      byparr:
+          image: ghcr.io/thephaseless/byparr:latest
+          container_name: byparr
           ports:
             - "8191:8191"
-          environment:
-            - LOG_LEVEL=info
+          shm_size: "2gb"
           restart: unless-stopped
    ```
 
@@ -125,7 +125,7 @@ If you prefer running Stacks without Docker Compose, you can use the Docker CLI 
 **Prerequisites**
 
 - Docker installed
-- _(Recommended)_ FlareSolverr for solving Cloudflare/DDoS-guard
+- _(Recommended)_ Byparr (or FlareSolverr) for solving Cloudflare/DDoS-Guard
 - _(Optional)_ Anna's Archive membership for fast downloads
 
 1. Create the required folders on your host:
@@ -138,15 +138,15 @@ If you prefer running Stacks without Docker Compose, you can use the Docker CLI 
    ```bash
    docker network create stacks
    ```
-3. Set up FlareSolverr
+3. Set up Byparr (challenge solver)
    ```bash
    docker run -d \
-     --name flaresolverr \
+     --name byparr \
      --network stacks \
      -p 8191:8191 \
-     -e LOG_LEVEL=info \
+     --shm-size=2g \
      --restart unless-stopped \
-     ghcr.io/flaresolverr/flaresolverr:latest
+     ghcr.io/thephaseless/byparr:latest
    ```
 4. Set up Stacks
    ```bash
@@ -160,7 +160,7 @@ If you prefer running Stacks without Docker Compose, you can use the Docker CLI 
      -v /path/to/logs:/opt/stacks/logs \
      -e USERNAME=admin \
      -e PASSWORD=stacks \
-     -e SOLVERR_URL=flaresolverr:8191 \
+     -e SOLVER_URL=byparr:8191 \
      -e TZ=UTC \
      --restart unless-stopped \
      zelest/stacks:latest
