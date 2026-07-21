@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.1]
+
+### Bugfixes
+- Fixed all Anna's Archive downloads failing with "Could not find downloads panel on page". The hardcoded domain list was stale — `annas-archive.li` is now a parked/for-sale domain and `.pm`/`.in` are dead, leaving no working domain. Updated `ANNAS_ARCHIVE_DOMAINS` to the current live set (`annas-archive.gl`, `.pk`, `.gd`), verified against the [open-slum.org](https://open-slum.org/) uptime monitor.
+- Hardened domain rotation: `_get_download_links_single_domain` now raises when a page returns HTTP 200 but has no downloads panel (a parked/blocked/challenge page), so `try_domains_until_success` rotates to the next domain instead of silently accepting the junk page and pinning a dead domain as "working". This is what let a single stale domain take the whole downloader down.
+
 ## [1.3.0]
 
 ### Features

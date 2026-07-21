@@ -244,8 +244,12 @@ def _get_download_links_single_domain(d, md5, domain):
         # Find the downloads panel
         downloads_panel = soup.find('div', id='md5-panel-downloads')
         if not downloads_panel:
-            d.logger.warning("Could not find downloads panel on page")
-            return filename, links
+            # A 200 with no downloads panel means we got a parked/blocked/challenge
+            # page rather than the real md5 page (e.g. a domain that's been lost or
+            # is being CDN-challenged). Raise so try_domains_until_success rotates to
+            # the next domain instead of silently accepting an empty result and
+            # pinning this dead domain as the "working" one.
+            raise Exception(f"No downloads panel on {domain} (parked/blocked/challenge page?)")
         
         # Slow_download links - only accept "no waitlist" ones
         for li in downloads_panel.find_all('li', class_='list-disc'):
