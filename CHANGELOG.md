@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.2]
+
+### Bugfixes
+- Fixed slow_download files never completing ("Could not find download link" after every solve). Anna's Archive serves the `slow_download` endpoint's DDoS-Guard challenge on an HTTP 403, which the browser-based solver returns *without* clearing (the homepage/md5 challenges are 200-served and solve fine). Since DDoS-Guard clearance is domain-wide, `solve_with_solver` now clears the domain **root** — a page the solver reliably solves — then adopts the resulting `__ddg` clearance cookies **and the solver's user-agent** (DDoS-Guard binds clearance to the UA) on the session, and fetches the real target URL itself. The slow_download page then loads with the actual download link.
+- Send `max_timeout` (Byparr, seconds) alongside `maxTimeout` (FlareSolverr, ms) so the solver timeout is honored either way.
+
 ## [1.3.1]
 
 ### Bugfixes
