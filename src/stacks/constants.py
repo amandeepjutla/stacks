@@ -27,10 +27,14 @@ GUNICORN_CONFIG_FILE = PROJECT_ROOT / "src" / "stacks" / "gunicorn_config.py"
 RESERVED_PATHS = ['/logs', '/config', '/files', '/cache', '/web']
 
 # Anna's Archive Domains (rotating fallbacks)
+# Live Anna's Archive domains, primary first. AA rotates domains often as older
+# ones are seized/lost (e.g. .li is now a parked/for-sale domain; .org/.se/.pm/.in
+# are dead). Current working set verified against https://open-slum.org/ uptime
+# monitor. Keep this in sync with open-slum when downloads start failing.
 ANNAS_ARCHIVE_DOMAINS = [
-    "annas-archive.li",
-    "annas-archive.pm",
-    "annas-archive.in"
+    "annas-archive.gl",
+    "annas-archive.pk",
+    "annas-archive.gd"
 ]
 
 # Domain state file (tracks which domain worked last)
