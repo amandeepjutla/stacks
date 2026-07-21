@@ -14,33 +14,35 @@ The dashboard updates in real-time every 2 seconds, showing:
 - Recent download history with success/failure indicators
 - Fast download quota (when enabled)
 
-## FlareSolverr Integration
+## Challenge Solver Integration
 
-### What is FlareSolverr?
+### What is the challenge solver?
 
-FlareSolverr is a proxy server that solves Cloudflare and DDoS-Guard challenges. Many mirror sites use these protections, which can block automated downloads. FlareSolverr bypasses these challenges, allowing Stacks to download from protected mirrors.
+The challenge solver is a proxy server that solves Cloudflare and DDoS-Guard challenges. Many mirror sites use these protections, which can block automated downloads. The solver bypasses these challenges, allowing Stacks to download from protected mirrors.
+
+Stacks speaks the FlareSolverr `/v1` API, so it works with any FlareSolverr-compatible solver. The bundled `docker-compose.yml` ships **[Byparr](https://github.com/ThePhaseless/Byparr)** — a drop-in replacement with a stronger browser engine that clears current DDoS-Guard challenges the original FlareSolverr can no longer solve.
 
 ### When do you need it?
 
 - **Recommended for most users** - Many slow download mirrors are protected by Cloudflare or DDoS-Guard
 - **Required if downloads fail with 403 errors** - This indicates protection is blocking the download
-- **Optional if using only fast downloads** - Fast download API doesn't need FlareSolverr
+- **Optional if using only fast downloads** - Fast download API doesn't need the solver
 
 ### Setup
 
-If you used the provided docker-compose.yml, FlareSolverr is already included and configured. If not:
+If you used the provided docker-compose.yml, Byparr is already included and configured. If not:
 
-1. Deploy FlareSolverr (see docker-compose.yml for reference)
+1. Deploy a solver (see docker-compose.yml for reference)
 2. In Stacks Settings tab:
-   - Enter FlareSolverr URL (e.g., `http://flaresolverr:8191`)
+   - Enter the solver URL (e.g., `http://byparr:8191`)
    - Set timeout (60 seconds recommended)
-   - Click "Test FlareSolverr" to verify connection
-   - Enable FlareSolverr and save settings
+   - Click "Test Connection" to verify
+   - Enable the solver and save settings
 
 ### How it works
 
-- Stacks automatically uses FlareSolverr when it encounters 403 errors
-- Cookies are cached per-domain for 24 hours to reduce FlareSolverr calls
+- Stacks automatically uses the solver when it encounters 403 errors
+- Cookies are cached per-domain for 24 hours to reduce solver calls
 - Pre-warming: Cookies are refreshed automatically on startup
 - No manual intervention needed once configured
 

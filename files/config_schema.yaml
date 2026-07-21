@@ -70,13 +70,13 @@ fast_download:
     default: null
     max_length: 256
 
-flaresolverr:
+solver:
   enabled:
     types: [BOOL]
     default: false
   url:
     types: [IP, URL, NULL]
-    default: FLARESOLVERR
+    default: SOLVER
     max_length: 256
   timeout:
     types: [INTEGER]

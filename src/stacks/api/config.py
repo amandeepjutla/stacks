@@ -18,10 +18,10 @@ from stacks.security.auth import (
 
 logger = logging.getLogger("api")
 
-@api_bp.route('/api/config/test_flaresolverr', methods=['POST'])
+@api_bp.route('/api/config/test_solver', methods=['POST'])
 @require_auth_with_permissions(allow_downloader=False)
-def api_config_test_flaresolverr():
-    """Test FlareSolverr connection"""
+def api_config_test_solver():
+    """Test solver connection"""
     data = request.json
     test_url = data.get('url', 'http://localhost:8191')
     timeout = data.get('timeout', 10)
@@ -39,19 +39,19 @@ def api_config_test_flaresolverr():
     try:
         import requests
 
-        # Try to connect to FlareSolverr's health endpoint
+        # Try to connect to the solver's health endpoint
         response = requests.get(test_url, timeout=timeout)
         
         if response.status_code == 200:
             return jsonify({
                 'success': True,
-                'message': 'FlareSolverr is online and responding',
+                'message': 'Solver is online and responding',
                 'status_code': response.status_code
             })
         else:
             return jsonify({
                 'success': False,
-                'error': f'FlareSolverr returned status {response.status_code}'
+                'error': f'Solver returned status {response.status_code}'
             }), 400
             
     except requests.exceptions.Timeout:
@@ -62,7 +62,7 @@ def api_config_test_flaresolverr():
     except requests.exceptions.ConnectionError:
         return jsonify({
             'success': False,
-            'error': 'Could not connect to FlareSolverr. Is it running?'
+            'error': 'Could not connect to solver. Is it running?'
         }), 503
     except Exception as e:
         return jsonify({

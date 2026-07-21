@@ -27,10 +27,10 @@ fast_download:
   enabled: false
   key: null
 
-flaresolverr:
-  enabled: false # Enables or disables the use of FlareSolverr
-  url: null # The URL and port of your FlareSolverr instance (e.g., http://flaresolverr:8191)
-  timeout: 60 # How long to wait for FlareSolverr to return a result (10-300 seconds)
+solver:
+  enabled: false # Enables or disables the use of the challenge solver (Byparr/FlareSolverr)
+  url: null # The URL and port of your solver instance (e.g., http://byparr:8191)
+  timeout: 60 # How long to wait for the solver to return a result (10-300 seconds)
 
 queue:
   max_history: 100
@@ -50,7 +50,7 @@ environment:
   - TZ=UTC # Timezone for logs and timestamps
   - USERNAME=admin # Initial username (seeds config on first run)
   - PASSWORD=stacks # Initial password (seeds config on first run)
-  - SOLVERR_URL=flaresolverr:8191 # Embedds the URL and port for FlareSolverr on first run
+  - SOLVER_URL=byparr:8191 # Embeds the solver URL and port on first run
   - RESET_ADMIN=true # Force password reset
   - FLASK_DEBUG=true # Sets Flask into Debug mode on startup
 

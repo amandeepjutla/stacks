@@ -6,7 +6,7 @@ from stacks.utils.domainutils import get_working_domain
 from stacks.downloader.cookies import _load_cached_cookies, _save_cookies_to_cache, _prewarm_cookies
 from stacks.downloader.direct import download_direct
 from stacks.downloader.fast_download import try_fast_download, get_fast_download_info, refresh_fast_download_info
-from stacks.downloader.flaresolver import solve_with_flaresolverr
+from stacks.downloader.solver import solve_with_solver
 from stacks.downloader.html import get_download_links, parse_download_link_from_html
 from stacks.downloader.mirrors import download_from_mirror
 from stacks.downloader.orchestrator import orchestrate_download
@@ -14,7 +14,7 @@ from stacks.downloader.utils import get_unique_filename
 
 class AnnaDownloader:
     def __init__(self, output_dir="./downloads", incomplete_dir=None, progress_callback=None,
-                 fast_download_config=None, flaresolverr_url=None, flaresolverr_timeout=60000,
+                 fast_download_config=None, solver_url=None, solver_timeout=60000,
                  status_callback=None, prefer_title_naming=False, include_hash="none"):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -48,25 +48,25 @@ class AnnaDownloader:
         
         self.fast_download_refresh_cooldown = 3600  # 1 hour
         
-        # FlareSolverr configuration
+        # Solver configuration
         # Normalize URL: add http:// if no scheme is present
-        if flaresolverr_url and not flaresolverr_url.startswith(('http://', 'https://')):
-            flaresolverr_url = f"http://{flaresolverr_url}"
+        if solver_url and not solver_url.startswith(('http://', 'https://')):
+            solver_url = f"http://{solver_url}"
 
-        self.flaresolverr_url = flaresolverr_url
-        self.flaresolverr_timeout = flaresolverr_timeout
+        self.solver_url = solver_url
+        self.solver_timeout = solver_timeout
 
         # Filename preference configuration
         self.prefer_title_naming = prefer_title_naming
         self.include_hash = include_hash  # "none", "prefix", or "suffix"
 
-        if flaresolverr_url:
-            self.logger.info(f"FlareSolverr enabled: {flaresolverr_url}")
+        if solver_url:
+            self.logger.info(f"Solver enabled: {solver_url}")
             self.logger.info("Using ALL download sources (Anna's Archive slow_download + external mirrors)")
         else:
-            self.logger.info("FlareSolverr not configured - using external mirrors and slow_download with cached cookies")
+            self.logger.info("Solver not configured - using external mirrors and slow_download with cached cookies")
 
-        # Always try to load cached cookies (useful for slow_download even without FlareSolverr)
+        # Always try to load cached cookies (useful for slow_download even without the solver)
         self.load_cached_cookies()
     
     # Cookies
@@ -101,9 +101,9 @@ class AnnaDownloader:
         return refresh_fast_download_info(self, force)
     
     
-    # Flare solver
-    def solve_with_flaresolverr(self, url):
-        return solve_with_flaresolverr(self, url)
+    # Solver
+    def solve_with_solver(self, url):
+        return solve_with_solver(self, url)
     
     
     # HTML

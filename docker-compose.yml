@@ -29,22 +29,23 @@ services:
       # Uncomment to reset admin password to above values
       # - RESET_ADMIN=true
 
-      # If you're using the included flaresolverr, this will automatically connect it.
+      # If you're using the included byparr solver, this will automatically connect it.
       # If you already got it running, you can change this address to match your local
       # setup, or delete this variable and set it up inside Stacks.
-      - SOLVERR_URL=flaresolverr:8191
+      - SOLVER_URL=byparr:8191
 
       # Set your timezone, a comprehensive list can be found here:
       # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
       - TZ=UTC
 
-  # Optional, but recommended, bypasses Cloudflare and DDoS-Guard to allow slow download
-  # to go more smoothly
-  flaresolverr:
-    image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: flaresolverr
+  # Optional, but recommended: a challenge solver that bypasses Cloudflare and
+  # DDoS-Guard so slow downloads go through. Byparr is a drop-in, FlareSolverr-
+  # compatible solver (same /v1 API, port 8191) with a stronger browser engine
+  # that clears DDoS-Guard challenges FlareSolverr can no longer solve.
+  byparr:
+    image: ghcr.io/thephaseless/byparr:latest
+    container_name: byparr
     ports:
       - '8191:8191'
-    environment:
-      - LOG_LEVEL=info
+    shm_size: '2gb'   # Camoufox/Firefox needs more shared memory than FlareSolverr
     restart: unless-stopped

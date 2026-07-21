@@ -502,10 +502,10 @@ function loadSettings() {
       document.getElementById("setting-fast-enabled").checked = !!config.fast_download?.enabled;
       document.getElementById("setting-fast-key").value = config.fast_download?.key || "";
 
-      // FlareSolverr
-      document.getElementById("setting-flaresolverr-enabled").checked = !!config.flaresolverr?.enabled;
-      document.getElementById("setting-flaresolverr-url").value = config.flaresolverr?.url || "http://localhost:8191";
-      document.getElementById("setting-flaresolverr-timeout").value = config.flaresolverr?.timeout || 60;
+      // Solver
+      document.getElementById("setting-solver-enabled").checked = !!config.solver?.enabled;
+      document.getElementById("setting-solver-url").value = config.solver?.url || "http://localhost:8191";
+      document.getElementById("setting-solver-timeout").value = config.solver?.timeout || 60;
 
       // Queue
       document.getElementById("setting-max-history").value = config.queue?.max_history || 100;
@@ -536,10 +536,10 @@ function saveSettings() {
       enabled: document.getElementById("setting-fast-enabled").checked,
       key: document.getElementById("setting-fast-key").value || null,
     },
-    flaresolverr: {
-      enabled: document.getElementById("setting-flaresolverr-enabled").checked,
-      url: document.getElementById("setting-flaresolverr-url").value || "http://localhost:8191",
-      timeout: parseInt(document.getElementById("setting-flaresolverr-timeout").value) || 60,
+    solver: {
+      enabled: document.getElementById("setting-solver-enabled").checked,
+      url: document.getElementById("setting-solver-url").value || "http://localhost:8191",
+      timeout: parseInt(document.getElementById("setting-solver-timeout").value) || 60,
     },
     queue: {
       max_history: parseInt(document.getElementById("setting-max-history").value),
@@ -720,14 +720,14 @@ function testFastKey() {
     });
 }
 
-function testFlaresolverr() {
-  const url = document.getElementById("setting-flaresolverr-url").value;
-  const timeout = parseInt(document.getElementById("setting-flaresolverr-timeout").value) || 10;
-  const resultDiv = document.getElementById("flaresolverr-test-result");
+function testSolver() {
+  const url = document.getElementById("setting-solver-url").value;
+  const timeout = parseInt(document.getElementById("setting-solver-timeout").value) || 10;
+  const resultDiv = document.getElementById("solver-test-result");
 
   if (!url) {
     resultDiv.className = "test-result error";
-    resultDiv.textContent = "Please enter a FlareSolverr URL first";
+    resultDiv.textContent = "Please enter a solver URL first";
     return;
   }
 
@@ -735,7 +735,7 @@ function testFlaresolverr() {
   resultDiv.textContent = "Testing connection...";
   resultDiv.style.display = "block";
 
-  apiFetch("/api/config/test_flaresolverr", {
+  apiFetch("/api/config/test_solver", {
     method: "POST",
     body: JSON.stringify({ url: url, timeout: timeout }),
   })

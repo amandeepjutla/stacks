@@ -60,13 +60,13 @@ class DownloadWorker:
             'domain_index': 0
         }
         
-        # Get FlareSolverr config
-        flaresolverr_enabled = self.config.get('flaresolverr', 'enabled', default=False)
-        flaresolverr_url = self.config.get('flaresolverr', 'url', default='http://localhost:8191')
-        flaresolverr_timeout = self.config.get('flaresolverr', 'timeout', default=60)
+        # Get solver config
+        solver_enabled = self.config.get('solver', 'enabled', default=False)
+        solver_url = self.config.get('solver', 'url', default='http://localhost:8191')
+        solver_timeout = self.config.get('solver', 'timeout', default=60)
         
         # Convert timeout to milliseconds (downloader expects milliseconds)
-        flaresolverr_timeout_ms = flaresolverr_timeout * 1000
+        solver_timeout_ms = solver_timeout * 1000
         
         # Get file naming config
         prefer_title_naming = self.config.get('downloads', 'prefer_title_naming', default=False)
@@ -76,15 +76,15 @@ class DownloadWorker:
         incomplete_folder_path = self.config.get('downloads', 'incomplete_folder_path', default='/download/incomplete')
         incomplete_dir = PROJECT_ROOT / incomplete_folder_path.lstrip('/')
 
-        # Pass None if FlareSolverr is disabled, otherwise pass the URL
+        # Pass None if the solver is disabled, otherwise pass the URL
         self.downloader = AnnaDownloader(
             output_dir=DOWNLOAD_PATH,
             incomplete_dir=incomplete_dir,
             progress_callback=self.progress_callback,
             status_callback=self.status_callback,
             fast_download_config=fast_config,
-            flaresolverr_url=flaresolverr_url if flaresolverr_enabled else None,
-            flaresolverr_timeout=flaresolverr_timeout_ms,
+            solver_url=solver_url if solver_enabled else None,
+            solver_timeout=solver_timeout_ms,
             prefer_title_naming=prefer_title_naming,
             include_hash=include_hash
         )
@@ -103,23 +103,23 @@ class DownloadWorker:
             except Exception as e:
                 self.logger.error(f"Failed to test fast download key: {e}")
         
-        # Test FlareSolverr if enabled
-        if flaresolverr_enabled and flaresolverr_url:
+        # Test solver if enabled
+        if solver_enabled and solver_url:
             # Normalize URL for testing (same as downloader does)
-            test_url = flaresolverr_url
+            test_url = solver_url
             if not test_url.startswith(('http://', 'https://')):
                 test_url = f"http://{test_url}"
 
-            self.logger.info(f"Testing FlareSolverr connection at {test_url}...")
+            self.logger.info(f"Testing solver connection at {test_url}...")
             try:
                 import requests
                 response = requests.get(test_url, timeout=5)
                 if response.status_code == 200:
-                    self.logger.info("FlareSolverr connection successful")
+                    self.logger.info("Solver connection successful")
                 else:
-                    self.logger.warning(f"FlareSolverr returned status {response.status_code}")
+                    self.logger.warning(f"Solver returned status {response.status_code}")
             except Exception as e:
-                self.logger.error(f"Failed to connect to FlareSolverr: {e}")
+                self.logger.error(f"Failed to connect to solver: {e}")
                 self.logger.warning("Downloads will fall back to external mirrors only")
         
         self.logger.info("Downloader recreated with updated config")
